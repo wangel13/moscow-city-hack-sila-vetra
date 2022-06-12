@@ -1,2 +1,7 @@
 bs4
 requests
+flask
+flask_cors
+simhash
+pytest
+gunicorn
