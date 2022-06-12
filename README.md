@@ -21,7 +21,10 @@ Run server and frontend:
 
 ```
 {
-  "text": "Big news text to test"
+  // text to check
+  "text": "Big news text to test",
+  // tolerance
+  "k": 12
 }
 ```
 

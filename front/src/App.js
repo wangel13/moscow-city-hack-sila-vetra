@@ -4,9 +4,10 @@ import Mark from './mark'
 
 function App() {
   const [text, setText] = useState()
-  const [k, setK] = useState(15)
+  const [isError, setIsError] = useState(false)
+  const [k, setK] = useState(12)
   const [isLoading, setIsLoading] = useState(false)
-  const [checkResult, setCheckResult] = useState(null)
+  const [checkResult, setCheckResult] = useState()
 
   const handleInput = (e) => {
     setText(e?.target?.value)
@@ -17,6 +18,8 @@ function App() {
   }
 
   const handleCheck = async () => {
+    setCheckResult(undefined)
+    setIsError(false)
     setIsLoading(true)
     try {
       let response = await fetch('http://188.166.164.18:5000/check', {
@@ -31,6 +34,7 @@ function App() {
       setCheckResult(result?.news)
       setIsLoading(false)
     } catch (error) {
+      setIsError(true)
       console.log({ error })
       setIsLoading(false)
     }
@@ -124,7 +128,16 @@ function App() {
           </a>
         </p>
 
-        {checkResult && checkResult.length ? (
+        {isError && (
+          <div
+            className="p-4 mb-4 mt-6 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+            role="alert"
+          >
+            <span className="font-medium">Ошибка!</span> Измените параметры и попробуйте ещё.
+          </div>
+        )}
+
+        {checkResult && checkResult.length > 0 && (
           <div className="mt-6">
             <h2 className="pt-2 pb-6 sm:pr-16 text-xl font-medium title-font text-gray-900">
               Ваша оценка
@@ -157,7 +170,8 @@ function App() {
               </ul>
             </div>
           </div>
-        ) : (
+        )}
+        {checkResult && checkResult.length === 0 && (
           <div className="mt-6">
             <h2 className="pt-2 pb-6 sm:pr-16 text-xl font-medium title-font text-gray-900">
               Ваша оценка
