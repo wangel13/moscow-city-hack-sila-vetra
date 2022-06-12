@@ -115,7 +115,7 @@ function App() {
               <ul className="pl-5 list-disc">
                 {checkResult.map((item, index) => (
                   <li key={index}>
-                    <a className="underline" rel="noreferrer" href={item?.link}>
+                    <a className="underline" rel="noreferrer" target="_blank" href={item?.link}>
                       Новость {index + 1}
                     </a>
                   </li>
