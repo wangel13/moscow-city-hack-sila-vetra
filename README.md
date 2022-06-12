@@ -1,6 +1,51 @@
 # Moscow City Hack: Check fake tech news
 
 ## Setup
+1. Clone repo
+2. Run:
+```commandline
+pip3 install -r requirements.txt
+```
+3. Create /etc/systemd/system/backend.service
+```
+[Unit]
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+WorkingDirectory=/root/moscow-city-hack-sila-vetra/
+ExecStart=/root/moscow-city-hack-sila-vetra/start_api.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+and /etc/systemd/system/frontend.service
+```
+[Unit]
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+WorkingDirectory=/root/moscow-city-hack-sila-vetra/
+ExecStart=/root/moscow-city-hack-sila-vetra/start_web.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+4. Then execute
+```commandline
+systemctl daemon-reload
+systemctl enable backend
+systemctl enable frontend
+systemctl start backend
+systemctl start frontend
+```
 
 ## Start
 
