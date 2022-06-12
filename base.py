@@ -12,11 +12,13 @@ class NewsChecker:
             data = json.load(f)
             self.hash = data['items']
 
-    def check(self, text):
+    def check(self, text, k):
         news_hash = Simhash(text)
 
         news = []
         for item in self.hash:
             hash = Simhash(item['hash'])
-            news.append((item['id'], news_hash.distance(hash)))
+            distance = news_hash.distance(hash)
+            if distance <= k:
+                news.append((item['id'], k))
         return news

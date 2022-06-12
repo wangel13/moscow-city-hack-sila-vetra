@@ -11,8 +11,9 @@ base = Blueprint('api', __name__)
 def check():
     data = request.json
     text = data.get('text')
+    k = int(data.get('k'))
     checker = NewsChecker()
-    news = checker.check(text)
+    news = checker.check(text, k)
     news.sort(key=lambda x: x[1])
     news = news[:5]
     result = []

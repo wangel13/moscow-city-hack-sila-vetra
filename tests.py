@@ -19,10 +19,18 @@ test_text = 'Москва заняла первое место среди евр
 
 
 def test_sample_data():
-    response = app.test_client().post('/check',
-                                      data=json.dumps({'text': test_text}),
-                                      content_type='application/json')
+    response = app.test_client().post(
+        '/check', data=json.dumps({'text': test_text, 'k': 12}),
+        content_type='application/json')
 
     assert response.status_code == 200
     data = response.json['news']
     assert data[0]['id'] == 99623073
+
+    response = app.test_client().post(
+        '/check', data=json.dumps({'text': test_text, 'k': 0}),
+        content_type='application/json')
+
+    assert response.status_code == 200
+    data = response.json['news']
+    assert not data
