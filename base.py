@@ -1,4 +1,5 @@
 import json
+import re
 
 from simhash import Simhash
 
@@ -13,6 +14,7 @@ class NewsChecker:
             self.hash = data['items']
 
     def check(self, text, k):
+        text = re.sub(r'\s+', ' ', text.strip())
         news_hash = Simhash(text)
 
         news = []
