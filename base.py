@@ -20,5 +20,5 @@ class NewsChecker:
             hash = Simhash(item['hash'])
             distance = news_hash.distance(hash)
             if distance <= k:
-                news.append((item['id'], k))
+                news.append((item['id'], distance))
         return news
