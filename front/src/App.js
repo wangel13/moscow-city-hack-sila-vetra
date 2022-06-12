@@ -4,12 +4,18 @@ import Mark from './mark'
 
 function App() {
   const [text, setText] = useState()
+  const [k, setK] = useState(15)
   const [isLoading, setIsLoading] = useState(false)
-  const [checkResult, setCheckResult] = useState([])
+  const [checkResult, setCheckResult] = useState(null)
 
   const handleInput = (e) => {
     setText(e?.target?.value)
   }
+
+  const handleK = (e) => {
+    setK(e?.target?.value)
+  }
+
   const handleCheck = async () => {
     setIsLoading(true)
     try {
@@ -18,7 +24,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, k }),
       })
       let result = await response.json()
       console.log({ result })
@@ -37,21 +43,49 @@ function App() {
           Проверка новостей
         </h1>
         <div className="mb-4 w-full bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-          <div className="py-2 px-4 bg-white rounded-t-lg dark:bg-gray-800">
-            <label htmlFor="comment" className="sr-only">
-              Your comment
+          <div className="py-4 px-4 bg-white rounded-t-lg dark:bg-gray-800">
+            <label
+              htmlFor="message"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
+            >
+              Новость для оценки
             </label>
             <textarea
               disabled={isLoading}
               onChange={handleInput}
               value={text}
+              id="message"
               rows="12"
-              className="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Вставьте текст новости"
-              required=""
             ></textarea>
+
+            <label
+              htmlFor="helper-text"
+              className="block mb-2 mt-6 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              Порог оценки
+            </label>
+            <input
+              max={100}
+              min={0}
+              disabled={isLoading}
+              onChange={handleK}
+              value={k}
+              type="number"
+              id="helper-text"
+              aria-describedby="helper-text-explanation"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="0"
+            />
+            <p
+              id="helper-text-explanation"
+              className="mt-2 text-sm text-gray-500 dark:text-gray-400"
+            >
+              Желательно задавать в диапaзоне от 0 до 100
+            </p>
           </div>
-          <div className="flex justify-between items-center py-2 px-3 border-t dark:border-gray-600">
+          <div className="flex justify-between items-center py-3 px-3 border-t dark:border-gray-600">
             <button
               disabled={isLoading}
               onClick={handleCheck}
@@ -90,7 +124,7 @@ function App() {
           </a>
         </p>
 
-        {checkResult.length ? (
+        {checkResult && checkResult.length ? (
           <div className="mt-6">
             <h2 className="pt-2 pb-6 sm:pr-16 text-xl font-medium title-font text-gray-900">
               Ваша оценка
@@ -124,7 +158,17 @@ function App() {
             </div>
           </div>
         ) : (
-          ''
+          <div className="mt-6">
+            <h2 className="pt-2 pb-6 sm:pr-16 text-xl font-medium title-font text-gray-900">
+              Ваша оценка
+            </h2>
+            <div className="flex items-center mb-5">
+              <Mark distance={100} />
+              <p className="ml-4 font-medium text-gray-900 dark:text-white">
+                Похожих источников нет
+              </p>
+            </div>
+          </div>
         )}
       </div>
     </div>
